@@ -10,8 +10,8 @@ from sklearn import linear_model
 from sklearn.model_selection import train_test_split
 
 data = pd.read_csv('cancer.csv')
-data['diagnosis'].replace({'M': 1, 'B': 0}, inplace=True)
-data.to_csv('cancer.csv')
+data['diagnosis'] = data['diagnosis'].replace({'M': 1, 'B': 0})
+data.to_csv('cancer.csv', index=False)
 del data
 
 data_path = 'cancer.csv'

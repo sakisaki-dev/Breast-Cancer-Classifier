@@ -26,16 +26,14 @@ Note: the script overwrites `cancer.csv` with the recoded diagnosis column. Keep
 git clone https://github.com/sakisaki-dev/Breast-Cancer-Classifier.git
 cd Breast-Cancer-Classifier
 python -m venv venv && source venv/bin/activate
-pip install -r requirements.txt "pandas<3"
+pip install -r requirements.txt
 python classifier.py
 ```
 
-Each plot opens in a window; close it to continue. Metrics print to the terminal.
-
-`pandas<3` is needed because the diagnosis recoding uses `replace(..., inplace=True)` on a column, which pandas 3 no longer applies, and the script then fails at the first model fit.
+Each plot opens in a window; close it to continue. Metrics print to the terminal. Works with pandas 2 and 3.
 
 ## Limitations
 
 * Models are evaluated on a single 80/20 split with no cross-validation, and features are not scaled.
-* Random forest and MLP have no fixed random seed, so their scores change between runs.
+* The random forest, MLP and depth-5 decision tree in the comparison have no fixed random seed, so their scores change between runs.
 * The script is a learning exercise, not a clinical tool.
