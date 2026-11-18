@@ -1,49 +1,41 @@
-# README.md
+# Breast Cancer Classifier
 
-# Breast Cancer Classification Portfolio Project
+A walkthrough of classic machine learning classifiers that predict whether a breast tumor is malignant or benign from cell-nucleus measurements in the Breast Cancer Wisconsin (Diagnostic) dataset. Everything is in one script, `classifier.py`, using pandas, scikit-learn, matplotlib and seaborn.
 
-This project demonstrates a portfolio-ready implementation of breast cancer diagnosis prediction using Logistic Regression and Decision Tree classifiers in Python.
+## How it works
 
-## Project Overview
+The script builds up from a single hand-set threshold to a comparison of nine scikit-learn models:
 
-The dataset used is the [Breast Cancer Wisconsin (Diagnostic) Data Set](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+%28Diagnostic%29), containing features extracted from breast cancer biopsy images.
+1. Recodes `diagnosis` (M = 1, B = 0) and plots `radius_mean` against diagnosis.
+2. Fits a linear regression line to show why regression is a poor fit for a 0/1 label.
+3. Classifies with a manual threshold (`radius_mean > 15`) and reports accuracy.
+4. Splits the data 80/20 (`random_state=1`) and trains logistic regression on `radius_mean` alone, then `texture_mean` alone, and plots predicted malignancy probabilities.
+5. Trains logistic regression on four features (`texture_mean`, `concavity_mean`, `area_mean`, `radius_mean`) and reports a confusion matrix, precision and recall.
+6. Trains a depth-3 decision tree on the same features and plots the tree.
+7. Compares accuracy, precision and recall for k-nearest neighbors, linear SVM, Gaussian process, decision tree, random forest, MLP, AdaBoost, Gaussian naive Bayes and QDA, and draws a bar chart.
 
-### Goals
+## Data
 
-* Explore and visualize the dataset.
-* Implement single-feature and multi-feature Logistic Regression classifiers.
-* Implement a Decision Tree classifier.
-* Compare classifier performance using accuracy, precision, recall, and confusion matrices.
+The dataset is not included. Download the CSV version with named columns (`diagnosis`, `radius_mean`, `texture_mean`, ...) from [Kaggle](https://www.kaggle.com/datasets/uciml/breast-cancer-wisconsin-data) and save it as `cancer.csv` in the repo root. The original source is the [UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic); the raw UCI file has no header row and will not work as-is.
 
-## Features Used
+Note: the script overwrites `cancer.csv` with the recoded diagnosis column. Keep a copy of the original.
 
-* radius\_mean
-* area\_mean
-* concavity\_mean
-* symmetry\_mean
+## Setup and run
 
-## Requirements
+```bash
+git clone https://github.com/sakisaki-dev/Breast-Cancer-Classifier.git
+cd Breast-Cancer-Classifier
+python -m venv venv && source venv/bin/activate
+pip install -r requirements.txt "pandas<3"
+python classifier.py
+```
 
-* Python 3.10+
-* pandas
-* numpy
-* matplotlib
-* seaborn
-* scikit-learn
+Each plot opens in a window; close it to continue. Metrics print to the terminal.
 
-## How to Run
+`pandas<3` is needed because the diagnosis recoding uses `replace(..., inplace=True)` on a column, which pandas 3 no longer applies, and the script then fails at the first model fit.
 
-1. Clone this repository.
-2. Ensure the dataset `cancer.csv` is in the same directory.
-3. Install the required packages listed in `requirements.txt`.
-4. Run the notebook `Logistic_Regression_Bc.ipynb`.
+## Limitations
 
-## Visualizations
-
-* Feature vs Diagnosis stripplots.
-* Confusion matrix heatmap.
-* Classifier comparison bar chart.
-
-## License
-
-MIT License
+* Models are evaluated on a single 80/20 split with no cross-validation, and features are not scaled.
+* Random forest and MLP have no fixed random seed, so their scores change between runs.
+* The script is a learning exercise, not a clinical tool.
